@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+		xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://code.alibabatech.com/schema/dubbo
+http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!--<bean id="dubboConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:dubbo.properties"/>
+		<property name="ignoreUnresolvablePlaceholders" value="false"/>
+	</bean>-->
+
+	<dubbo:application name="${dubbo.application.name}" logger="slf4j"/>
+	<dubbo:registry address="${dubbo.registry.address}" timeout="${dubbo.registry.timeout}"/>
+	<dubbo:protocol name="dubbo" port="${dubbo.protocol.port}"/>
+	<!--<dubbo:monitor protocol="registry"/>-->
+	<!-- 当ProtocolConfig和ServiceConfig某属性没有配置时,采用此缺省值 -->
+	<dubbo:provider timeout="10000" threadpool="fixed" threads="100" accepts="1000" retries="0" group="${dubbo.group}" version="0.4.0"/>
+
+	<bean id="agentServiceImpl" class="com.zlk.web.manager.service.impl.AgentServiceImpl"/>
+	<bean id="departmentServiceImpl" class="com.zlk.web.manager.service.impl.DepartmentServiceImpl"/>
+
+	<dubbo:service interface="com.zlk.service.api.service.AgentService" ref="agentServiceImpl"/>
+	<dubbo:service interface="com.zlk.service.api.service.DepartmentService" ref="departmentServiceImpl"/>
+
+</beans>

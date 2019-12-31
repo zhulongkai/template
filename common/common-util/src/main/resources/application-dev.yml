@@ -1,0 +1,129 @@
+server:
+  port: 14042
+  servlet:
+    session:
+      cookie:
+        http-only: true
+    context-path: /common-util
+  tomcat:
+    max-connections: 200
+    max-threads: 200
+logging:
+  file: logs/project.log
+dubbo:
+  group: demo
+  application:
+    id: project
+    name: project   #别名，提供方应用信息，用于计算依赖关系
+    version: 1.1
+    qos-port: 22224
+  registry:
+    id: project-registry
+    address: zookeeper://39.106.92.240:2181 #使用zookeeper注册中心暴露服务地址
+    timeout: 1000
+  protocol:
+    id: dubbo
+    name: dubbo
+    port: 10440         #配置暴露服务端口
+#    host: 192.168.1.14
+#  scan:
+#    basePackages: com.zhongji.centerweb.service   #扫描需要暴露的服务
+spring:
+  #发布应用程序配置
+  application:
+    name: sso-dubbo-provider
+  #时间+8小时
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat    #或正则yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8    #或UTC
+  resources:
+    static-locations: classpath:static/
+
+  datasource:
+    url: jdbc:mysql://39.106.92.240:3306/backstage?characterEncoding=utf8&useSSL=false&autoReconnect=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    dbcp2:
+      min-idle: 5
+      initial-size: 5
+      max-total: 5
+      max-wait-millis: 10000
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 10000
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+  servlet:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 500Mb
+  redis:
+    host: 39.106.92.240
+    port: 6379
+    database: 0
+    password:
+    timeout: 1000
+    jedis:
+      pool:
+        max-active: 1000
+        max-idle: 80
+        max-wait: 1000
+        min-idle: 8
+  cache:
+    redis:
+      time-to-live: 30m
+  session:
+    store-type: redis
+  profiles:
+    active: dev
+  #  thymeleaf:
+  #    mode: LEGACYHTML5
+  mail:
+    host: smtp.163.com
+    username: demand@163.com
+    password: password
+
+mail:
+  fromMail:
+    addr: demand@163.com
+user:
+  token:
+    expire:
+      minutes: 30
+file:
+  upload:
+    path: ./upload
+    img_table_path: /upload
+  templates:
+    path: ./upload/templates/corp_phase/material.html
+sms:
+  appid: 1b4f5136a7b545d8b3ea735d2356521f
+  sid: 32d264a8a8f29309b9e38de91c06af64
+  token: 11225d6eb631ec55123f54e7ad1b09fd
+  url: https://open.ucpaas.com/ol/sms/sendsms
+  uid: zjkj
+  templateid: 472360
+  timeout:
+    second: 60
+login:
+  maxCount: 5
+  lockTime: 15
+  only: true
+wx:
+  url: https://api.weixin.qq.com/sns/jscode2session
+  appid: wx9e1173ddc93629fa
+  secret: a443340b2f002200ed8a1ba8665f2ed6
+  js_code: 66
+jpush:
+  app_key: adaec767bf9db099ff988c6a
+  master_secret: d3c03c41da4d9aa496728acd
+  url: https://device.jpush.cn/v3/devices/

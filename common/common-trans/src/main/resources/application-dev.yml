@@ -1,0 +1,103 @@
+server:
+  port: 14040
+  servlet:
+    session:
+      cookie:
+        http-only: true
+    context-path: /web-platform
+  tomcat:
+    max-connections: 200
+    max-threads: 200
+logging:
+  file: logs/project.log
+dubbo:
+  group: super
+  application:
+    id: super
+    name: super   #别名，提供方应用信息，用于计算依赖关系
+    version: 1.1
+    qos-port: 22223
+  registry:
+    id: super-registry
+    address: zookeeper://39.106.92.240:2181 #使用zookeeper注册中心暴露服务地址
+    timeout: 1000
+  protocol:
+    id: dubbo
+    name: dubbo
+    port: 10440         #配置暴露服务端口
+#    host: 192.168.1.14
+  scan:
+    basePackages: com.zhongji.project.platform.service.impl  #扫描需要暴露的服务
+spring:
+  #发布应用程序配置
+  application:
+    name: sso-dubbo-provider
+  #时间+8小时
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat    #或正则yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8    #或UTC
+  resources:
+    static-locations: classpath:static/
+
+  datasource:
+    url: jdbc:mysql://39.106.92.240:3306/sso?characterEncoding=utf8&useSSL=false&autoReconnect=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    dbcp2:
+      min-idle: 5
+      initial-size: 5
+      max-total: 5
+      max-wait-millis: 10000
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 10000
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+  servlet:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 500Mb
+  redis:
+    host: 39.106.92.240
+    port: 6379
+    database: 0
+    password:
+  cache:
+    redis:
+      time-to-live: 30m
+  session:
+    store-type: redis
+  #  thymeleaf:
+  #    mode: LEGACYHTML5
+user:
+  token:
+    expire:
+      minutes: 30
+
+  # TxManager Host Ip
+tx-lcn:
+  manager:
+    host: 127.0.0.1
+    # TxClient连接请求端口
+    port: 8070
+    # 心跳检测时间(ms)
+    heart-time: 15000
+    # 分布式事务执行总时间
+    dtx-time: 30000
+    #参数延迟删除时间单位ms
+    concurrent-level: 128
+  message:
+    netty:
+      attr-delay-time: 10000
+      # 开启日志
+  logger:
+    enabled: true
